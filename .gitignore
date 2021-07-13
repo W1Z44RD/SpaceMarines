@@ -15,7 +15,7 @@ target/
 !**/src/test/**/target/
 /out
 /production
-/workflows
+.github
 
 ##############################
 ## Maven
