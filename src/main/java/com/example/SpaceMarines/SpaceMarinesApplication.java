@@ -9,5 +9,4 @@ public class SpaceMarinesApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(SpaceMarinesApplication.class, args);
 	}
-
 }
