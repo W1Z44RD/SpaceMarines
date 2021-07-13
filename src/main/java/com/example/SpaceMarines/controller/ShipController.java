@@ -2,7 +2,6 @@ package com.example.SpaceMarines.controller;
 
 import com.example.SpaceMarines.constants.Constant;
 import com.example.SpaceMarines.entities.DropShip;
-import com.example.SpaceMarines.entities.Marine;
 import com.example.SpaceMarines.service.EntityShipsInserter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -11,8 +11,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Collection;
-
 @Slf4j
 @RestController
 @RequestMapping(path = "marine")
@@ -28,12 +26,12 @@ public class MarineController {
     }
 
     @GetMapping("/get/all")
-    public ResponseEntity<Collection<Marine>> getMarines(){
+    public ResponseEntity getMarines(){
         return new ResponseEntity(entityMarinesInserter.findAll(), HttpStatus.OK);
     }
 
     @GetMapping("/get/id/{id}")
-    public ResponseEntity<Marine> getById(@PathVariable Long id){
+    public ResponseEntity getById(@PathVariable Long id){
         return new ResponseEntity(entityMarinesInserter.findById(id), HttpStatus.OK);
     }
 
@@ -74,11 +72,10 @@ public class MarineController {
     public ResponseEntity updateShip(@PathVariable Long id, @PathVariable Long shipId) throws Exception {
         Marine marine = entityMarinesInserter.findById(id).orElseThrow(() -> new Exception(Constant.NOT_FOUND));
         DropShip ship = entityShipsInserter.findById(shipId).orElseThrow(() -> new Exception(Constant.NOT_FOUND));
-        marine.setShip(ship);
+        marine.setDropship(ship);
         ship.addMarine(marine);
         entityMarinesInserter.save(marine);
         entityShipsInserter.saveAndFlush(ship);
-        log.info(entityShipsInserter.getById(shipId).getCrew().toString());
         return new ResponseEntity(Constant.OK, HttpStatus.OK);
     }
 }
