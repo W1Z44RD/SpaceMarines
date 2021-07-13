@@ -7,8 +7,6 @@ import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 @Slf4j
@@ -20,24 +18,21 @@ public class DropShip {
     @Id
     @Column
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    private Long shipId;
     @Column
     private String callsign;
     @Column
     private int age;
     @Column
     private int capacity;
-    @Column
-//    @JsonIgnore
-    @OneToMany(mappedBy = "id", fetch = FetchType.EAGER)
-    private List<Marine> crew;
+    @OneToMany(mappedBy = "dropship")
+    private List<Marine> marine;
 
     public void addMarine(Marine marine){
-        this.crew.add(marine);
-        log.info(this.getCrew().toString());
+        this.marine.add(marine);
     }
 
-    public List<Marine> getCrew() {
-        return crew;
+    public List<Marine> getMarine() {
+        return marine;
     }
 }
