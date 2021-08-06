@@ -32,7 +32,7 @@ public class Marine {
         this.setRank(this.getRank().toLowerCase());
     }
 
-    public void Capitalise(){
+    public void capitalise(){
         this.setName(this.getName().substring(0, 1).toUpperCase() + this.getName().substring(1));
     }
 }

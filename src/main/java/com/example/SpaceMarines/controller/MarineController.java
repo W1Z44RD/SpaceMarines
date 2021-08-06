@@ -11,6 +11,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Optional;
+
 @Slf4j
 @RestController
 @RequestMapping(path = "marine")
@@ -44,7 +46,7 @@ public class MarineController {
     public ResponseEntity addMarine(@RequestBody Marine marine) {
         try {
             marine.lowerCase();
-            marine.Capitalise();
+            marine.capitalise();
             log.info(String.valueOf(marine));
             entityMarinesInserter.save(marine);
             return new ResponseEntity(HttpStatus.OK);
@@ -56,22 +58,32 @@ public class MarineController {
 
     @DeleteMapping("/delete/{id}")
     public ResponseEntity deleteById(@PathVariable Long id) throws Exception {
-        Marine marine = entityMarinesInserter.findById(id).orElseThrow(() -> new Exception(Constant.NOT_FOUND));
+        Optional<Marine> marine = entityMarinesInserter.findById(id);
+        if (marine.isEmpty()){
+            return new ResponseEntity("Not found with id: "+id, HttpStatus.NOT_FOUND);
+        }
         entityMarinesInserter.deleteById(id);
-        return new ResponseEntity(HttpStatus.OK);
+        return new ResponseEntity(marine.get().toString() + " Deleted", HttpStatus.OK);
     }
 
     @PatchMapping("/patch/rank/{id}")
-    public ResponseEntity updateRank(@PathVariable Long id, @RequestBody String rank) throws Exception {
-        Marine marine = entityMarinesInserter.findById(id).orElseThrow(() -> new Exception(Constant.NOT_FOUND));
-        marine.setRank(rank);
+    public ResponseEntity updateRank(@PathVariable Long id, @RequestBody Marine marineRank) throws Exception {
+        Optional<Marine> marine = entityMarinesInserter.findById(id);
+        Marine marineEdit= marine.get();
+        marineEdit.setRank(marineRank.getRank());
+        entityMarinesInserter.save(marineEdit);
         return new ResponseEntity(Constant.OK, HttpStatus.OK);
     }
 
     @PutMapping("/put/ship/{id}/{shipId}")
     public ResponseEntity updateShip(@PathVariable Long id, @PathVariable Long shipId) throws Exception {
-        Marine marine = entityMarinesInserter.findById(id).orElseThrow(() -> new Exception(Constant.NOT_FOUND));
-        DropShip ship = entityShipsInserter.findById(shipId).orElseThrow(() -> new Exception(Constant.NOT_FOUND));
+        Optional<Marine> marineFind = entityMarinesInserter.findById(id);
+        Optional<DropShip> shipFind = entityShipsInserter.findById(shipId);
+        if (marineFind.isEmpty() || shipFind.isEmpty()){
+            return new ResponseEntity(Constant.NOT_FOUND ,HttpStatus.NOT_FOUND);
+        }
+        Marine marine = marineFind.get();
+        DropShip ship = shipFind.get();
         marine.setDropship(ship);
         ship.addMarine(marine);
         entityMarinesInserter.save(marine);
