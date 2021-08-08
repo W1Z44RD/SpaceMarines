@@ -4,12 +4,14 @@ import com.example.SpaceMarines.constants.Constant;
 import com.example.SpaceMarines.entities.DropShip;
 import com.example.SpaceMarines.service.EntityShipsInserter;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.tomcat.util.bcel.Const;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
+import java.util.Optional;
 
 @Slf4j
 @RestController
@@ -40,7 +42,10 @@ public class ShipController {
 
     @DeleteMapping("/delete/{id}")
     public ResponseEntity deleteById(@PathVariable Long id) throws Exception {
-        DropShip dropShip = entityShipsInserter.findById(id).orElseThrow(() -> new Exception(Constant.NOT_FOUND));
+        Optional<DropShip> dropShip = entityShipsInserter.findById(id);
+        if (dropShip.isEmpty()){
+            return new ResponseEntity(Constant.NOT_FOUND, HttpStatus.NOT_FOUND);
+        }
         entityShipsInserter.deleteById(id);
         return new ResponseEntity(HttpStatus.OK);
     }
