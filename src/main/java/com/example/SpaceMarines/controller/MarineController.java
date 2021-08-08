@@ -22,6 +22,10 @@ public class MarineController {
     @Autowired
     private EntityShipsInserter entityShipsInserter;
 
+    public ResponseEntity health(){
+        return new ResponseEntity("Online", HttpStatus.OK);
+    }
+
     @GetMapping("/test")
     public ResponseEntity test(){
         return new ResponseEntity(Constant.OK, HttpStatus.OK);
