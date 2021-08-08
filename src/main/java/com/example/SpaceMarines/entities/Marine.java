@@ -24,7 +24,6 @@ public class Marine {
     private int age;
     @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnore
-    @JoinColumn(name = "id")
     private DropShip dropship;
 
     public void lowerCase(){

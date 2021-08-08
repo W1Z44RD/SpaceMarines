@@ -49,5 +49,4 @@ public class ShipController {
         entityShipsInserter.deleteById(id);
         return new ResponseEntity(HttpStatus.OK);
     }
-
 }
