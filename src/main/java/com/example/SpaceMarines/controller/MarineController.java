@@ -3,6 +3,7 @@ package com.example.SpaceMarines.controller;
 import com.example.SpaceMarines.constants.Constant;
 import com.example.SpaceMarines.entities.DropShip;
 import com.example.SpaceMarines.entities.Marine;
+import com.example.SpaceMarines.responseObjects.NotFound;
 import com.example.SpaceMarines.service.EntityMarinesInserter;
 import com.example.SpaceMarines.service.EntityShipsInserter;
 import lombok.extern.slf4j.Slf4j;
@@ -22,12 +23,8 @@ public class MarineController {
     @Autowired
     private EntityShipsInserter entityShipsInserter;
 
-    public ResponseEntity health(){
-        return new ResponseEntity("Online", HttpStatus.OK);
-    }
-
     @GetMapping("/test")
-    public ResponseEntity test(){
+    public ResponseEntity health(){
         return new ResponseEntity(Constant.OK, HttpStatus.OK);
     }
 
@@ -37,8 +34,11 @@ public class MarineController {
     }
 
     @GetMapping("/get/id/{id}")
-    public ResponseEntity getById(@PathVariable Long id){
-        return new ResponseEntity(entityMarinesInserter.findById(id), HttpStatus.OK);
+    public ResponseEntity<Marine> getById(@PathVariable Long id){
+        if (entityMarinesInserter.findById(id).isEmpty()){
+            return new ResponseEntity("null", HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<Marine>(entityMarinesInserter.findById(id).get(), HttpStatus.OK);
     }
 
     @GetMapping("/get/name/{name}")
@@ -73,8 +73,12 @@ public class MarineController {
     @PatchMapping("/patch/rank/{id}")
     public ResponseEntity updateRank(@PathVariable Long id, @RequestBody Marine marineRank) throws Exception {
         Optional<Marine> marine = entityMarinesInserter.findById(id);
-        Marine marineEdit= marine.get();
+        if (marine.isEmpty()){
+            return new ResponseEntity(new NotFound("Not Found"), HttpStatus.NOT_FOUND);
+        }
+        Marine marineEdit = marine.get();
         marineEdit.setRank(marineRank.getRank());
+        log.info(marineRank.getRank());
         entityMarinesInserter.save(marineEdit);
         return new ResponseEntity(Constant.OK, HttpStatus.OK);
     }

@@ -26,6 +26,13 @@ public class Marine {
     @JsonIgnore
     private DropShip dropship;
 
+    public Marine(String name, String rank, int age) {
+        this.name = name;
+        this.rank = rank;
+        this.age = age;
+    }
+
+
     public void lowerCase(){
         this.setName(this.getName().toLowerCase());
         this.setRank(this.getRank().toLowerCase());
