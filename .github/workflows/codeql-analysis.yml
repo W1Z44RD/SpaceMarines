@@ -40,8 +40,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        language:
-         - 'java'
+        language: ['java']
 
     - name: Checkout repository
       uses: actions/checkout@v2
