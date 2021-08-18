@@ -20,7 +20,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class MarineControllerTest {
     @LocalServerPort
     private int port;
-    private String url = Constant.URL;
+    private final String url = Constant.URL;
 
     @Autowired
     private TestRestTemplate testRestTemplate;

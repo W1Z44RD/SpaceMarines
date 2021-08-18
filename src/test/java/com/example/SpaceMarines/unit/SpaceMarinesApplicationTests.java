@@ -1,4 +1,4 @@
-package com.example.SpaceMarines;
+package com.example.SpaceMarines.unit;
 
 import com.example.SpaceMarines.controller.MarineController;
 import com.example.SpaceMarines.controller.ShipController;
