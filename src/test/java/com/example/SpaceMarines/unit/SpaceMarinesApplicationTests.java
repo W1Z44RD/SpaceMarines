@@ -24,5 +24,9 @@ public class SpaceMarinesApplicationTests {
 		assertThat(shipController).isNotNull();
 
 	}
+	@Test
+	public void fail() throws Exception {
+		assertThat(false).isTrue();
+	}
 
 }
