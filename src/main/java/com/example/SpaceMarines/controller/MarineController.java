@@ -74,13 +74,13 @@ public class MarineController {
     public ResponseEntity updateRank(@PathVariable Long id, @RequestBody Marine marineRank) throws Exception {
         Optional<Marine> marine = entityMarinesInserter.findById(id);
         if (marine.isEmpty()){
-            return new ResponseEntity(new NotFound("Not Found"), HttpStatus.NOT_FOUND);
+            return new ResponseEntity(new NotFound(Constant.NOT_FOUND), HttpStatus.NOT_FOUND);
         }
         Marine marineEdit = marine.get();
         marineEdit.setRank(marineRank.getRank());
         log.info(marineRank.getRank());
         entityMarinesInserter.save(marineEdit);
-        return new ResponseEntity(Constant.OK, HttpStatus.OK);
+        return new ResponseEntity(marineEdit, HttpStatus.OK);
     }
 
     @PutMapping("/put/ship/{id}/{shipId}")
