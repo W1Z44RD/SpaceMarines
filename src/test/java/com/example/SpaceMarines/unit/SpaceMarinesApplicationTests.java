@@ -24,5 +24,4 @@ public class SpaceMarinesApplicationTests {
 		assertThat(shipController).isNotNull();
 
 	}
-
 }
