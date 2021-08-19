@@ -4,7 +4,6 @@ import com.example.SpaceMarines.constants.Constant;
 import com.example.SpaceMarines.entities.DropShip;
 import com.example.SpaceMarines.service.EntityShipsInserter;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.tomcat.util.bcel.Const;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,15 +19,24 @@ public class ShipController {
     @Autowired
     private EntityShipsInserter entityShipsInserter;
 
+    @GetMapping("/test")
+    public ResponseEntity health(){
+        return new ResponseEntity(Constant.OK, HttpStatus.OK);
+    }
+
     @GetMapping("/get/all")
     public ResponseEntity<Collection<DropShip>> getShips(){
         return new ResponseEntity<>(entityShipsInserter.findAll(), HttpStatus.OK);
     }
 
-    @GetMapping("/get/{id}")
+    @GetMapping("/get/id/{id}")
     public ResponseEntity getShipById(@PathVariable Long id){
+        if (entityShipsInserter.findById(id).isEmpty()){
+            return new ResponseEntity("null", HttpStatus.NOT_FOUND);
+        }
         return new ResponseEntity(entityShipsInserter.findById(id), HttpStatus.OK);
     }
+
     @PostMapping("/add")
     public ResponseEntity addShip(@RequestBody DropShip dropShip) {
         try {
