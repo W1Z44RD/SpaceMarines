@@ -1,5 +1,6 @@
 package com.example.SpaceMarines.integration;
 
+import com.example.SpaceMarines.entities.DropShip;
 import com.example.SpaceMarines.entities.Marine;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
@@ -71,5 +72,14 @@ public class MarineControllerTest {
         assertThat(collection.contains("Bob"));
         assertThat(collection.contains("James"));
         assertThat(collection.size() == 2);
+    }
+
+    @Test
+    public void putToShipTest() throws Exception{
+        this.testRestTemplate.postForEntity(url + port + "/marine/add", marineHttpEntity, Marine.class);
+        DropShip shipHttpEntity = new DropShip("Alpha", 5, 18);
+        this.testRestTemplate.postForEntity(url + port + "/ship/add", shipHttpEntity, Marine.class);
+        this.testRestTemplate.put(url + port + "/marine/put/ship/1/1", String.class);
+        assertThat(this.testRestTemplate.getForObject(url + port + "/ship/get/id/1", DropShip.class)).toString().contains("Bob");
     }
 }

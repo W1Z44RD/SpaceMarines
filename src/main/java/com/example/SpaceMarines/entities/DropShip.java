@@ -1,10 +1,8 @@
 package com.example.SpaceMarines.entities;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
 import javax.persistence.*;
 import java.util.List;
@@ -26,6 +24,12 @@ public class DropShip {
     private int capacity;
     @OneToMany(mappedBy = "dropship")
     private List<Marine> marine;
+
+    public DropShip(String callsign, int age, int capacity){
+        this.callsign = callsign;
+        this.age = age;
+        this.capacity = capacity;
+    }
 
     public void addMarine(Marine marine){
         this.marine.add(marine);
