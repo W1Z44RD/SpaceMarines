@@ -12,6 +12,8 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.test.annotation.DirtiesContext;
 
+import java.util.Collection;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
 @Slf4j
@@ -25,11 +27,13 @@ public class MarineControllerTest {
     @Autowired
     private TestRestTemplate testRestTemplate;
     private HttpEntity<Marine> marineHttpEntity;
+    private HttpEntity<Marine> marineHttpEntity2;
 
     @BeforeEach
     public void setup() {
         testRestTemplate.getRestTemplate().setRequestFactory(new HttpComponentsClientHttpRequestFactory());
         marineHttpEntity = new HttpEntity<>(new Marine("Bob", "Private", 24));
+        marineHttpEntity2 = new HttpEntity<>(new Marine("James", "Lieutenant", 35));
     }
 
     @Test
@@ -61,6 +65,11 @@ public class MarineControllerTest {
 
     @Test
     public void getAllTest() throws Exception{
-        assertThat(this.testRestTemplate.getForObject(url + port + "/marine/get/all", Object.class)).toString().contains(marineHttpEntity.toString());
+        this.testRestTemplate.postForEntity(url + port + "/marine/add", marineHttpEntity, Marine.class);
+        this.testRestTemplate.postForEntity(url + port + "/marine/add", marineHttpEntity2, Marine.class);
+        Collection collection = this.testRestTemplate.getForObject(url + port + "/marine/get/all", Collection.class);
+        assertThat(collection.contains("Bob"));
+        assertThat(collection.contains("James"));
+        assertThat(collection.size() == 2);
     }
 }
