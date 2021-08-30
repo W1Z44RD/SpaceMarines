@@ -8,6 +8,8 @@ import com.example.SpaceMarines.service.EntityMarinesInserter;
 import com.example.SpaceMarines.service.EntityShipsInserter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,16 +18,24 @@ import java.util.Optional;
 
 @Slf4j
 @RestController
+@RefreshScope
 @RequestMapping(path = "marine")
 public class MarineController {
     @Autowired
     private EntityMarinesInserter entityMarinesInserter;
+    @Value("${message:hello}")
+    private String message;
     @Autowired
     private EntityShipsInserter entityShipsInserter;
 
     @GetMapping("/test")
     public ResponseEntity health(){
         return new ResponseEntity(Constant.OK, HttpStatus.OK);
+    }
+
+    @GetMapping("/message")
+    public String message(){
+        return this.message;
     }
 
     @GetMapping("/get/all")
